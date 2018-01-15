@@ -96,14 +96,15 @@ public class Kalman{
         //Prediction  Kalman.zGyroVariance
 
 
-        int Lambda = LocalAngle+deltaT*GyroNewAxis; // predict new angle
+        int Lambda = LocalAngle+deltaT*GyroNewAxis;                         // predict new angle
         int GyroFilterAxesVariance = 100 + GyroNewAxisVariance*deltaT;      // predict variance
 
         //Update
 
+        // roll, pitch, yaw
+        int CurrentMove = (int) Math.toDegrees(Math.atan(Math.toRadians(GyroNewAxis/Math.sqrt(AccCalibrateAxis1*AccCalibrateAxis1+
+                AccCalibrateAxis2*AccCalibrateAxis2))));
 
-        int CurrentMove = (int) Math.atan(GyroNewAxis/Math.sqrt(AccCalibrateAxis1*AccCalibrateAxis1+
-                AccCalibrateAxis2*AccCalibrateAxis2));
 
 
 
