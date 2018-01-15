@@ -1,36 +1,43 @@
 package readFromFile;
 
 import java.io.*;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.List;
 
 public class ReadFile {
     public ArrayList<int[]> data;
-    public ArrayList<int[]> accelerometerData = new ArrayList<>();
+    public ArrayList<int[]> microcontrollerData = new ArrayList<>();
 
 
     public ArrayList<int[]> processLogFile() {
         ArrayList<int[]> readings = new ArrayList();
-        System.out.println("ChestAAA");
+        System.out.println("process Log File");
         try{
-            FileInputStream fstream = new FileInputStream("C:\\Users\\Ostap Kharysh\\Documents\\BambergWS1718\\SME\\KalmanFiltering\\src\\Ostap\\Kharysh\\NoAcceleration.log");
+            FileInputStream fstream = new FileInputStream("C:\\Users\\Ostap Kharysh\\Documents\\BambergWS1718\\SME\\KalmanFiltering\\src\\Ostap\\Kharysh\\Capture11-01-18.txt");
             BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
             String strLine;
 
    /* read log line by line */
-            while ((strLine = br.readLine()) != null)   {
+            while ((strLine= br.readLine()) != null){
      /* parse strLine to obtain what you want */
-                //System.out.println (strLine);
                 String[] ReadingsList = strLine.split(",");
-                ReadingsList[0] = ReadingsList[0].replace("IMU(","");
-                ReadingsList[ReadingsList.length-1] = ReadingsList[ReadingsList.length-1].replace(").","");
-                int[] output = new int[12];
-                for (int i =0; i< ReadingsList.length; i++) {
-                    output[i] = Integer.parseInt(ReadingsList[i]);
+                //System.out.println (strLine);
+                if (strLine.equals("")){
+                    //System.out.println("Empty");
                 }
-                //vlizty siudy i zrobyty perekonvertaziu na zyfry( IA v TEBE viriu)
-                  readings.add(output);
+
+                else if  (ReadingsList[0].equals("$GPRMC"))  {
+                    //System.out.println("$GPRMC");
+                }else{
+                    ReadingsList[0] = ReadingsList[0].replace("#IMU:","");
+                    ReadingsList[ReadingsList.length-1] = ReadingsList[ReadingsList.length-1].replace(").","");
+                    int[] output = new int[12];
+                    for (int i =0; i< ReadingsList.length; i++) {
+                        output[i] = Integer.parseInt(ReadingsList[i]);
+                }
+                    //System.out.println("BULO");
+                    readings.add(output);
+                }
+
             }
             fstream.close();
 
@@ -40,23 +47,24 @@ public class ReadFile {
         return readings;
     }
 
-    public ArrayList<int[]> getAccelerometerData() {
+    public ArrayList<int[]> getMicrocontrollerData() {
 
 
-        return accelerometerData;
+        return microcontrollerData;
     }
 
-    public void setAccelerometerData(ArrayList<int[]> inputData) {
+    public void setMicrocontrollerData(ArrayList<int[]> inputData) {
 
         for (int i=0; i < inputData.size(); i++){
-            int[] lst = new int[6]; // 3 if include z
-            lst[0] = inputData.get(i)[1];
-            lst[1] = inputData.get(i)[2];
-            lst[2] = inputData.get(i)[3]; // If include Z
-            lst[3] = inputData.get(i)[5];
-            lst[4] = inputData.get(i)[6];
-            lst[5] = inputData.get(i)[7];
-            this.accelerometerData.add(i, lst);
+            int[] lst = new int[7]; // 3 if include z
+            lst[0] = inputData.get(i)[0];  //  [1]
+            lst[1] = inputData.get(i)[1];  //  [2]
+            lst[2] = inputData.get(i)[2]; // [3] If include Z
+            lst[3] = inputData.get(i)[3]; // [5]
+            lst[4] = inputData.get(i)[4]; //  [6]
+            lst[5] = inputData.get(i)[5];  // [7]
+            lst[6] = inputData.get(i)[8];  //  compass Z
+            this.microcontrollerData.add(i, lst);
         }
     }
 
