@@ -116,6 +116,7 @@ public class Kalman{
                 (Math.pow(Math.sqrt(GyroFilterAxisVariance)*deltaT, 2) +100);
         Lambda = Lambda + ZKgain*(CurrentMove - deltaT*GyroNewAxis);
         GyroFilterAxisVariance = GyroNewAxisVariance-ZKgain*(GyroFilterAxisVariance*deltaT);
+
         ZLambdaVar[0] = Lambda;
         ZLambdaVar[1] = GyroFilterAxisVariance;
         System.out.println("LAMBDA");

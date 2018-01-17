@@ -3,6 +3,8 @@ package Ostap.Kharysh;
 import KalmanFilter.Kalman;
 import readFromFile.ReadFile;
 
+import java.io.FileFilter;
+
 public class Main {
 
     public static void main(String[] args) {
@@ -40,16 +42,17 @@ public class Main {
             System.out.println("GYRO Z:");
            // System.out.println(Kfilter.getAz());
            // System.out.println(Kalman.getzACCMean());
-            System.out.println(Kfilter.CalculateVariance(Kalman.getGyroData(), 2, Kalman.getzGYROMean()));
-            System.out.println(Kfilter.getGz());
-            System.out.println(Kalman.getzGYROMean());
-            System.out.println("INSHE");
-            System.out.println(Kfilter.CalculateVariance2(Kfilter.getGx(), Kfilter.getGy(), Kfilter.getGz(),
-                    Kalman.getxGYROMean(), Kalman.getyGYROMean(), Kalman.getzGYROMean()));
-            System.out.println("COMP Z");
-            System.out.println(Kfilter.getCompz());
+           // System.out.println(Kfilter.CalculateVariance(Kalman.getGyroData(), 2, Kalman.getzGYROMean()));
+            //System.out.println(Kfilter.getGz());
+            //System.out.println(Kalman.getzGYROMean());
+            //System.out.println("INSHE");
+            //System.out.println(Kfilter.CalculateVariance2(Kfilter.getGx(), Kfilter.getGy(), Kfilter.getGz(),
+            //        Kalman.getxGYROMean(), Kalman.getyGYROMean(), Kalman.getzGYROMean()));
+            //System.out.println("COMP Z");
+            //System.out.println(Kfilter.getCompz());
 
-            Kfilter.Filter();
+            Kfilter.Filter(Kfilter.getGz(), Kfilter.CalculateVariance(Kalman.getGyroData(), 2, Kalman.getzGYROMean()),
+                    Kfilter.getAz(), Kfilter.getAy(), Kfilter.getAz(), 1);
 
 
 
