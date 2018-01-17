@@ -1,5 +1,7 @@
 package KalmanFilter;
 
+import com.sun.org.apache.xpath.internal.SourceTree;
+
 import java.util.ArrayList;
 
 public class Kalman{
@@ -31,6 +33,8 @@ public class Kalman{
 
     static int zGyroVariance = 0; //
 
+    static double ZKgain = 0;
+    static double[] ZLambdaVar = {0, 0};
 
 
 
@@ -90,24 +94,34 @@ public class Kalman{
         }
     }
 
-    public void Filter(int LocalAngle, int GyroNewAxis, int GyroNewAxisVariance,
+    public void Filter( int GyroNewAxis, int GyroNewAxisVariance,
                        int AccNewAxis, int AccCalibrateAxis1, int AccCalibrateAxis2,  int deltaT) {
         //100 is an assumption of a default variance of any calculated angle
         //Prediction  Kalman.zGyroVariance
 
 
-        int Lambda = LocalAngle+deltaT*GyroNewAxis;                         // predict new angle
-        int GyroFilterAxesVariance = 100 + GyroNewAxisVariance*deltaT;      // predict variance
+        double Lambda = deltaT*GyroNewAxis;                         // predict new angle
+        double GyroFilterAxisVariance = 100 + GyroNewAxisVariance*deltaT;      // predict variance
 
         //Update
 
         // roll, pitch, yaw
-        int CurrentMove = (int) Math.toDegrees(Math.atan(Math.toRadians(GyroNewAxis/Math.sqrt(AccCalibrateAxis1*AccCalibrateAxis1+
+       double CurrentMove =  Math.toDegrees(Math.atan(Math.toRadians(AccNewAxis/Math.sqrt(AccCalibrateAxis1*AccCalibrateAxis1+
                 AccCalibrateAxis2*AccCalibrateAxis2))));
 
+        //gyro noise = 0.38 100Hz LPF (DLPFCFG=2)
+        // gyro noise = 0.03 At 10Hz
 
-
-
+        ZKgain = (GyroFilterAxisVariance*1)/
+                (Math.pow(Math.sqrt(GyroFilterAxisVariance)*deltaT, 2) +100);
+        Lambda = Lambda + ZKgain*(CurrentMove - deltaT*GyroNewAxis);
+        GyroFilterAxisVariance = GyroNewAxisVariance-ZKgain*(GyroFilterAxisVariance*deltaT);
+        ZLambdaVar[0] = Lambda;
+        ZLambdaVar[1] = GyroFilterAxisVariance;
+        System.out.println("LAMBDA");
+        System.out.println(Lambda);
+        System.out.println("Variance:");
+        System.out.println(GyroFilterAxisVariance);
     }
 
 

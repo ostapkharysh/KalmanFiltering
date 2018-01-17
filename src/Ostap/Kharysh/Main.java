@@ -49,6 +49,7 @@ public class Main {
             System.out.println("COMP Z");
             System.out.println(Kfilter.getCompz());
 
+            Kfilter.Filter();
 
 
 
@@ -56,6 +57,7 @@ public class Main {
            //Kfilter.CalculateMean(Kalman.getACData(), 1);
         }
         //intenzsense
+
 
 
 
